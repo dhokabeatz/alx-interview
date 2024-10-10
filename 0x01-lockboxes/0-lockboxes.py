@@ -5,14 +5,17 @@ open other lockboxes
 
 
 def canUnlockAll(boxes):
-    unlocked = set()
+    n = len(boxes)
+    unlocked = set([0])  # Set of unlocked boxes, starting with box 0
+    stack = [0]  # Stack to explore boxes starting from box 0
 
-    for box_id, box in enumerate(boxes):
-        if len(box) == 0 or box_id == 0:
-            unlocked.add(box_id)
-        for key in box:
-            if key < len(boxes) and key != box_id:
+    # Explore boxes using DFS
+    while stack:
+        box = stack.pop()
+        for key in boxes[box]:
+            if key < n and key not in unlocked:
                 unlocked.add(key)
-        if len(unlocked) == len(boxes):
-            return True
-    return False
+                stack.append(key)
+
+    # All boxes are unlocked if the number of unlocked boxes equals total boxes
+    return len(unlocked) == n
